@@ -1,5 +1,6 @@
 package com.shop.app.catalog.rest;
 
+import com.shop.app.catalog.clients.ProductServiceFeignClient;
 import com.shop.app.catalog.dto.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -15,8 +16,12 @@ import java.util.stream.Stream;
 @RequestMapping("/")
 public class CatalogRestService {
 
+//    @Autowired
+//    private RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    private ProductServiceFeignClient productApi;
+
 
     @Autowired
     private Environment env;
@@ -28,9 +33,7 @@ public class CatalogRestService {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/products")
     public Stream<Product> getProducts() {
-
-        List<Product> products = restTemplate.getForObject("http://product-service/products", List.class);
-        return products.stream();
+        return productApi.getProducts().stream();
     }
 
 }
